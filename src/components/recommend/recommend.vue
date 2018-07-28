@@ -1,37 +1,40 @@
 <template>
     <div class="recommend">
-        <div class="recommend-content">
-            <div class="slider-wrapper" v-if="recommends.length">
-                <slider>
-                    <div v-for="(item, index) in recommends" :key="index">
-                        <a :href="item.linkUrl">
-                            <img :src="item.picUrl" alt="">
-                        </a>
-                    </div>
-                </slider>
-            </div>
-            <div class="recommend-list">
-                <h1 class="list-title">热门歌单推荐</h1>
-                <ul>
-                    <li v-for="(item, index) in discList" class="item" :key="index">
-                        <div class="icon">
-                            <img :src="item.imgurl" alt="" width="60" height="60">
+        <scroll ref="scroll" class="recommend-content" :data="discList">
+            <div>
+                <div class="slider-wrapper" v-if="recommends.length">
+                    <slider>
+                        <div v-for="(item, index) in recommends" :key="index">
+                            <a :href="item.linkUrl">
+                                <!-- 解决fastclick和slider的点击冲突问题 -->
+                                <img class="needsclick" @load="loadImage" :src="item.picUrl" alt="">
+                            </a>
                         </div>
-                        <div class="text">
-                            <h2 class="name" v-html="item.creator.name"></h2>
-                            <p class="desc" v-html="item.dissname"></p>
-                        </div>
-                    </li>
-                </ul>
+                    </slider>
+                </div>
+                <div class="recommend-list">
+                    <h1 class="list-title">热门歌单推荐</h1>
+                    <ul>
+                        <li v-for="(item, index) in discList" class="item" :key="index">
+                            <div class="icon">
+                                <img v-lazy="item.imgurl" alt="" width="60" height="60">
+                            </div>
+                            <div class="text">
+                                <h2 class="name" v-html="item.creator.name"></h2>
+                                <p class="desc" v-html="item.dissname"></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </div>
+        </scroll>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
     import Slider from 'base/slider/slider'
 //   import Loading from 'base/loading/loading'
-//   import Scroll from 'base/scroll/scroll'
+    import Scroll from 'base/scroll/scroll'
     import {getRecommend, getDiscList} from 'api/recommend'
 //   import {playlistMixin} from 'common/js/mixin'
     import {ERR_OK} from 'api/config'
@@ -44,6 +47,9 @@
             }
         },
         created() {
+            // setTimeout(() => {
+                
+            // }, 2000)
             this._getRecommend()
             this._getDiscList()
         },
@@ -62,11 +68,18 @@
                         
                     }
                 })
+            },
+            loadImage() {
+                if(!this.checkloaded) {
+                    this.$refs.scroll.refresh()
+                    this.checkloaded = true
+                }
             }
 
         },
         components: {
-            Slider
+            Slider,
+            Scroll
         }
     }
 //   export default {
