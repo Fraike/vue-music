@@ -23,8 +23,8 @@ export function getSingerDetail(singerId){
     const data = Object.assign({}, commonParams, {
         hostUin: 0,
         needNewCode: 0,
-        platform: yqq,
-        order: listen,
+        platform: 'yqq',
+        order: 'listen',
         begin: 0,
         num: 100,
         songstatus: 1,
