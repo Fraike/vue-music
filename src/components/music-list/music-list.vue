@@ -25,13 +25,16 @@
         <div class="song-list-wrapper">
             <song-list :songs="songs"></song-list>
         </div>
+        <div class="loading-container" v-show="!songs.length">
+          <loading></loading>
+        </div>
     </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from "base/scroll/scroll";
-//   import Loading from 'base/loading/loading'
+  import Loading from 'base/loading/loading'
 import SongList from "base/song-list/song-list";
 import { prefixStyle } from "common/js/dom";
 //   import {playlistMixin} from 'common/js/mixin'
@@ -117,7 +120,8 @@ export default {
   },
   components: {
     Scroll,
-    SongList
+    SongList,
+    Loading
   }
 };
 </script>
